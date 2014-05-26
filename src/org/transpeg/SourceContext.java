@@ -1,4 +1,4 @@
-package org.llme;
+package org.transpeg;
 
 
 public class SourceContext {
@@ -242,6 +242,10 @@ public class SourceContext {
 
 	public final String formatErrorMessage(String msg1, String msg2) {
 		return this.source.formatErrorLineMarker(msg1, this.sourcePosition, msg2);
+	}
+
+	public final void showPosition(String msg) {
+		showPosition(msg, this.getPosition());
 	}
 
 	public final void showPosition(String msg, int pos) {

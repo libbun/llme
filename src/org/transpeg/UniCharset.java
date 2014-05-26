@@ -1,4 +1,4 @@
-package org.llme;
+package org.transpeg;
 
 public class UniCharset {
 	public final static UniCharset WhiteSpace = new UniCharset(" \t");
@@ -65,6 +65,37 @@ public class UniCharset {
 		}
 	}
 
+	public static final String _QuoteString(char OpenChar, String Text, char CloseChar) {
+		char SlashChar = '\\';
+		StringBuilder sb = new StringBuilder();
+		sb.append(OpenChar);
+		int i = 0;
+		for(; i < Text.length(); i = i + 1) {
+			char ch = Main._GetChar(Text, i);
+			if(ch == '\n') {
+				sb.append(SlashChar);
+				sb.append("n");
+			}
+			else if(ch == '\t') {
+				sb.append(SlashChar);
+				sb.append("t");
+			}
+			else if(ch == CloseChar) {
+				sb.append(SlashChar);
+				sb.append(ch);
+			}
+			else if(ch == '\\') {
+				sb.append(SlashChar);
+				sb.append(SlashChar);
+			}
+			else {
+				sb.append(ch);
+			}
+		}
+		sb.append(CloseChar);
+		return sb.toString();
+	}
+
 	public static final String _QuoteString(String OpenQuote, String Text, String CloseQuote) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(OpenQuote);
@@ -80,6 +111,9 @@ public class UniCharset {
 			else if(ch == '"') {
 				sb.append("\\\"");
 			}
+			else if(ch == '\'') {
+				sb.append("\\'");
+			}
 			else if(ch == '\\') {
 				sb.append("\\\\");
 			}
@@ -91,46 +125,18 @@ public class UniCharset {
 		return sb.toString();
 	}
 
-	public static final String _UnquoteString(String Text) {
+	public static final String _UnquoteString(String text) {
+		if(text.indexOf("\\") == -1) {
+			return text;
+		}
+		CharacterReader r = new CharacterReader(text);
 		StringBuilder sb = new StringBuilder();
-		char quote = Main._GetChar(Text, 0);
-		int i = 0;
-		int Length = Text.length();
-		if(quote == '"' || quote == '\'') {
-			i = 1;
-			Length -= 1;
-		}
-		else {
-			quote = '\0';
-		}
-		while(i < Length) {
-			char ch = Main._GetChar(Text, i);
-			if(ch == '\\') {
-				i = i + 1;
-				char next = Main._GetChar(Text, i);
-				switch (next) {
-				case 't':
-					ch = '\t';
-					break;
-				case 'n':
-					ch = '\n';
-					break;
-				case '"':
-					ch = '"';
-					break;
-				case '\'':
-					ch = '\'';
-					break;
-				case '\\':
-					ch = '\\';
-					break;
-				default:
-					ch = next;
-					break;
-				}
+		while(r.hasChar()) {
+			char ch = r.readChar();
+			if(ch == '0') {
+				break;
 			}
 			sb.append(ch);
-			i = i + 1;
 		}
 		return sb.toString();
 	}
@@ -167,6 +173,10 @@ class CharacterReader {
 	public CharacterReader(String text) {
 		this.text = text;
 		this.pos = 0;
+	}
+
+	public boolean hasChar() {
+		return (pos < this.text.length());
 	}
 
 	private char read(int pos) {

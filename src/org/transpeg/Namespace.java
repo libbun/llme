@@ -1,4 +1,4 @@
-package org.llme;
+package org.transpeg;
 
 public class Namespace extends SymbolTable {
 

@@ -1,17 +1,17 @@
-package org.llme;
+package org.transpeg;
 
 public class DebugEngine extends MetaEngine {
 
 	@Override
 	public void initTable(Namespace gamma) {
 		// define type information
-		gamma.setType("void",   new VoidType("void"));
-		gamma.setType("int",    new IntType("int32_t"));
-		gamma.setType("String", new StringType("string"));
-		gamma.addFunctor(new IntegerFunctor("c.int", gamma, "int"));
-		gamma.addFunctor(new DefineFunctor());
-		gamma.addFunctor(new ErrorFunctor());
-		gamma.load("lib/konoha.bun", this);
+//		gamma.setType("void",   new VoidType("void"));
+//		gamma.setType("int",    new IntType("int32_t"));
+//		gamma.setType("String", new StringType("string"));
+//		gamma.addFunctor(new IntegerFunctor("c.int", gamma, "int"));
+//		gamma.addFunctor(new DefineFunctor());
+//		gamma.addFunctor(new ErrorFunctor());
+//		gamma.load("lib/konoha.bun", this);
 	}
 
 	@Override

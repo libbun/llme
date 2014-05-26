@@ -1,4 +1,4 @@
-package org.llme;
+package org.transpeg;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -11,8 +11,8 @@ import java.io.InputStreamReader;
 
 
 public class Main {
-	public final static String  ProgName  = "llme";
-	public final static String  CodeName  = "ynu";
+	public final static String  ProgName  = "transpeg";
+	public final static String  CodeName  = "yokohama";
 	public final static int     MajorVersion = 0;
 	public final static int     MinerVersion = 1;
 	public final static int     PatchLevel   = 0;

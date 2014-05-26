@@ -22,7 +22,7 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package org.llme;
+package org.transpeg;
 
 import java.util.HashMap;
 

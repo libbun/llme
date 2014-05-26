@@ -1,4 +1,4 @@
-package org.llme;
+package org.transpeg;
 
 public class PegParserParser extends SourceContext {
 
@@ -193,7 +193,6 @@ public class PegParserParser extends SourceContext {
 			int startIndex = this.getPosition();
 			int endIndex = this.skipQuotedString('\'');
 			if(endIndex == -1) {
-				this.rollback(startIndex);
 				this.showErrorMessage("unclosed '");
 				return null;
 			}
@@ -215,31 +214,13 @@ public class PegParserParser extends SourceContext {
 			}
 			PegParserParser sub = this.subParser(startIndex, endIndex);
 			right = sub.parsePegExpr(leftLabel);
-			String name = this.parseObjectName();
-			right = new PegNewObject(leftLabel, leftJoin, right, name);
+			right = new PegNewObject(leftLabel, leftJoin, right);
 			right = this.parsePostfix(leftLabel, right);
 			return right;
 		}
 		this.showErrorMessage("unexpected character '" + this.getChar() + "'");
 		return right;
 	}
-
-	private final String parseObjectName() {
-		int pos = this.getPosition();
-		this.matchZeroMore(UniCharset.WhiteSpace);
-		if(this.match(':')) {
-			this.matchZeroMore(UniCharset.WhiteSpace);
-			int startIndex = this.getPosition();
-			this.matchZeroMore(UniCharset.NameSymbol);
-			int endIndex = this.getPosition();
-			if(endIndex > startIndex) {
-				return this.substring(startIndex, endIndex);
-			}
-		}
-		this.rollback(pos);
-		return "unknown";
-	}
-
 
 	private final Peg parseSequenceExpr(String leftLabel) {
 		Peg left = this.parseSingleExpr(leftLabel);

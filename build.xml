@@ -1,6 +1,6 @@
 <project name="libbun" default="jar">
 	<!-- directory / file definition -->
-	<property name="BinaryName" value="llme" />
+	<property name="BinaryName" value="transpeg" />
 	<property name="source_dir" value="src" />
 	<property name="build_dir"  value="build" />
 	<property name="root_dir"   value="." />
@@ -41,7 +41,7 @@
 			<fileset dir="." includes="lib/**" />
 			<exclude name="**/*Test.class" />
 			<manifest>
-				<attribute name="Main-Class" value="org.llme.Main" />
+				<attribute name="Main-Class" value="org.transpeg.Main" />
 			</manifest>
 			<zipfileset src="ext/asm-all-4.0.jar" />
 			<zipfileset src="${jline_jar}" />

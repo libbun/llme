@@ -1,4 +1,4 @@
-package org.llme;
+package org.transpeg;
 
 public abstract class MetaType  {
 	protected int         typeId    = -1;

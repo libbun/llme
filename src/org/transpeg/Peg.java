@@ -1,4 +1,4 @@
-package org.llme;
+package org.transpeg;
 
 public abstract class Peg {
 	public final static boolean _BackTrack = true;
@@ -131,7 +131,11 @@ class PegString extends PegAtom {
 
 	@Override
 	protected void stringfy(UniStringBuilder sb, boolean debugMode) {
-		sb.Append(UniCharset._QuoteString("'", this.symbol, "'"));
+		char Quote = '\'';
+		if(this.symbol.indexOf("'") != -1) {
+			Quote = '"';
+		}
+		sb.Append(UniCharset._QuoteString(Quote, this.symbol, Quote));
 	}
 
 	@Override
@@ -184,7 +188,7 @@ class PegCharacter extends PegAtom {
 
 	@Override
 	protected void stringfy(UniStringBuilder sb, boolean debugMode) {
-		sb.Append(UniCharset._QuoteString("[", this.symbol, "]"));
+		sb.Append("[" + this.symbol, "]");
 	}
 
 	@Override
@@ -326,9 +330,10 @@ class PegOneMoreExpr extends PegSuffixed {
 
 	@Override
 	public PegObject lazyMatch(PegObject parentNode, PegParserContext source, boolean hasNextChoice) {
+		int startPosition = source.getPosition();
 		PegObject prevNode = parentNode;
 		int count = 0;
-		while(true) {
+		while(source.hasChar()) {
 			boolean aChoice = true;
 			if(count < 1) {
 				aChoice = hasNextChoice;
@@ -341,6 +346,10 @@ class PegOneMoreExpr extends PegSuffixed {
 				this.warning("ignored result of " + this.innerExpr);
 			}
 			prevNode = node;
+			if(!(startPosition < source.getPosition())) {
+				this.warning("avoid infinite loop " + this);
+				break;
+			}
 			count = count + 1;
 		}
 		if(count < 1) {
@@ -368,9 +377,10 @@ class PegZeroMoreExpr extends PegSuffixed {
 
 	@Override
 	public PegObject lazyMatch(PegObject parentNode, PegParserContext source, boolean hasNextChoice) {
+		int startPosition = source.getPosition();
 		PegObject prevNode = parentNode;
 		int count = 0;
-		while(true) {
+		while(source.hasChar()) {
 			PegObject node = this.innerExpr.debugMatch(prevNode, source, true);
 			if(node.isErrorNode()) {
 				break;
@@ -379,6 +389,10 @@ class PegZeroMoreExpr extends PegSuffixed {
 				this.warning("ignored result of " + this.innerExpr);
 			}
 			prevNode = node;
+			if(!(startPosition < source.getPosition())) {
+				this.warning("avoid infinite loop " + this);
+				break;
+			}
 			count = count + 1;
 		}
 		return prevNode;
@@ -444,7 +458,7 @@ class PegNotPredicate extends PegPredicate {
 
 	@Override
 	protected String getOperator() {
-		return "&";
+		return "!";
 	}
 
 	@Override
@@ -659,13 +673,12 @@ class PegObjectName extends Peg {
 class PegNewObject extends Peg {
 	Peg innerExpr;
 	boolean leftJoin = false;
-	String nodeName = null;
+	String nodeName = "";
 
-	public PegNewObject(String leftLabel, boolean leftJoin, Peg e, String nodeName) {
+	public PegNewObject(String leftLabel, boolean leftJoin, Peg e) {
 		super(leftLabel);
 		this.innerExpr = e;
 		this.leftJoin = leftJoin;
-		this.nodeName = "";
 	}
 
 	@Override
@@ -703,6 +716,9 @@ class PegNewObject extends Peg {
 			if(log.type == 'p' && log.parentNode == newnode) {
 				newnode.append((PegObject)log.childNode);
 			}
+		}
+		if(newnode.name == null || newnode.name.length() == 0) {
+			newnode.name = source.source.substring(pos, source.getPosition());
 		}
 		newnode.setSource(this, source.source, pos, source.getPosition());
 		return newnode;
