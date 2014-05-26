@@ -1,0 +1,29 @@
+
+TopLevel <- Expr;
+
+Stmt    <- Expr;
+Expr    <- Sum;
+Sum     <- Product {$ _? ('+' #c.add / '-' #c.sub) _? $Product}*;
+Product <- Value {$ _? ('*' #c.mul / '/' #c.div / '%' #c.mod) _? $Value}*;
+Value   <- {[0-9]+ #c.int} / {'(' $Expr ')' #c.group};
+
+_          <- [ \t]+;
+
+Name       <- {[A-Za-z_] [A-Za-z0-9_]* #symbol};
+Functor    <- {(![ \t\;(){}] .)* #symbol};
+
+Type   <- {[A-Za-z] [A-Za-z0-9_]* #T};
+Type   <- {'Array<' _? $Type _? '>' #Tarray};
+Type   <- {'Func<' _? $Type (',' _? $Type)? _? '>' #Tfunc};
+TypeAnno <- ':' $Type;
+
+TopLevel       <- 'define' _? {$Signature _? '{' _? '\n' ($Section)* '}' #define};
+
+Signature      <- {$Functor $Params $TypeAnno? #signature};
+Params         <- {'(' ($Param (',' $Param)*)? ')' #params};
+Param          <- {$Name $TypeAnno? #param};
+Section        <- {!'}' ($SectionLabel)? ($SectionLine)+ #section};
+SectionLabel   <- {$Name ':' (!'\n' _? $Functor)* '\n' #section.label};
+SectionLine    <- {([|\t] ($Chank)? ($SectionCommand $Chank)* '\n') #section.line};
+Chank          <- {(![\n$] .)* #section.chunk};
+SectionCommand <- {'${' $Name (_ $Name)? '}' #section.command} / {'$$' #section.chunk};

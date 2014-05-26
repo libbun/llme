@@ -1,0 +1,13 @@
+
+define c.add(a,b) {
+	(${a}+${b})
+}
+
+define c.mul(a,b) {
+	(${a}*${b})
+}
+
+define c.div(a:int,b:int):int {
+	(${a}/${b})
+}
+
