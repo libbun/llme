@@ -21,27 +21,27 @@ public final class SourceBuilder extends UniStringBuilder {
 			char ch = Main._GetChar(Source, i);
 			if(ch == '\n') {
 				if(StartIndex < i) {
-					this.SourceList.add(Source.substring(StartIndex, i));
+					this.slist.add(Source.substring(StartIndex, i));
 				}
 				this.AppendNewLine();
 				StartIndex = i + 1;
 			}
 			if(ch == '\t') {
 				if(StartIndex < i) {
-					this.SourceList.add(Source.substring(StartIndex, i));
+					this.slist.add(Source.substring(StartIndex, i));
 				}
-				this.Append(this.Tabular);
+				this.append(this.Tabular);
 				StartIndex = i + 1;
 			}
 			i = i + 1;
 		}
 		if(StartIndex < i) {
-			this.SourceList.add(Source.substring(StartIndex, i));
+			this.slist.add(Source.substring(StartIndex, i));
 		}
 	}
 
 	public final int GetPosition() {
-		return this.SourceList.size();
+		return this.slist.size();
 	}
 
 	public final String CopyString(int BeginIndex, int EndIndex) {

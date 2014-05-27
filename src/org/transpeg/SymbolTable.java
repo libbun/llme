@@ -33,7 +33,7 @@ public class SymbolTable {
 
 	public final void setSymbol(String key, Functor f) {
 		if(this.symbolTable == null) {
-			this.symbolTable = new UniMap<Functor>(null);
+			this.symbolTable = new UniMap<Functor>();
 		}
 		//		System.out.println("set key: " + key + "");
 		this.symbolTable.put(key, f);
@@ -43,7 +43,7 @@ public class SymbolTable {
 		SymbolTable table = this;
 		while(table != null) {
 			if(table.symbolTable != null) {
-				Functor f = table.symbolTable.GetValue(key, null);
+				Functor f = table.symbolTable.get(key, null);
 				if(f != null) {
 					return f;
 				}

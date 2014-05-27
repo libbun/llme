@@ -379,13 +379,13 @@ public class Main {
 	}
 
 	public static String _SourceBuilderToString(UniStringBuilder sb) {
-		return Main._SourceBuilderToString(sb, 0, sb.SourceList.size());
+		return Main._SourceBuilderToString(sb, 0, sb.slist.size());
 	}
 
 	public static String _SourceBuilderToString(UniStringBuilder sb, int beginIndex, int endIndex) {
 		StringBuilder jsb = new StringBuilder();
 		for(int i = beginIndex; i < endIndex; i = i + 1) {
-			jsb.append(sb.SourceList.ArrayValues[i]);
+			jsb.append(sb.slist.ArrayValues[i]);
 		}
 		return jsb.toString();
 	}
@@ -396,7 +396,7 @@ public class Main {
 			while(i < List.size()) {
 				SourceBuilder Builder = List.ArrayValues[i];
 				System.out.println(Builder.toString());
-				Builder.Clear();
+				Builder.clear();
 				i = i + 1;
 			}
 		}
@@ -408,7 +408,7 @@ public class Main {
 					SourceBuilder Builder = List.ArrayValues[i];
 					w.write(Builder.toString());
 					w.write("\n\n");
-					Builder.Clear();
+					Builder.clear();
 					i = i + 1;
 				}
 				w.close();

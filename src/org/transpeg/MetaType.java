@@ -234,7 +234,7 @@ public abstract class MetaType  {
 		
 	static {
 		_TypeList = new UniArray<MetaType>(new MetaType[128]);
-		_TypeNameMap = new UniMap<MetaType>(null);
+		_TypeNameMap = new UniMap<MetaType>();
 		UntypedType = new UntypedType();
 		setGenerics("Func:*", new FuncType("Func<", ",", ">"));
 	}
@@ -264,12 +264,12 @@ public abstract class MetaType  {
 
 	public final static MetaType newGenericType(String baseName, UniArray<MetaType> typeList) {
 		UniStringBuilder sb = new UniStringBuilder();
-		sb.Append(baseName);
+		sb.append(baseName);
 		if(!mangleTypes(sb, typeList)) {
 			return cloneGenericType(baseName, typeList, false);
 		}
 		String key = sb.toString();
-		MetaType pType = _TypeNameMap.GetValue(key, null);
+		MetaType pType = _TypeNameMap.get(key, null);
 		if(pType == null) {
 			pType = cloneGenericType(baseName, typeList, true);
 			_TypeNameMap.put(key, pType);
@@ -284,17 +284,17 @@ public abstract class MetaType  {
 			if(Type.hasVarType()) {
 				return false;
 			}
-			sb.Append("+" + Type.typeId);
+			sb.append("+" + Type.typeId);
 		}
 		return true;
 	}
 
 	private static GenericType cloneGenericType(String name, UniArray<MetaType> TypeList, boolean uniquefy) {
 		String key = name + ":" + TypeList.size();
-		MetaType t = _TypeNameMap.GetValue(key, null);
+		MetaType t = _TypeNameMap.get(key, null);
 		if(t == null) {
 			key = name + ":*";
-			t = _TypeNameMap.GetValue(key, null);
+			t = _TypeNameMap.get(key, null);
 		}
 		if(t instanceof GenericType) {
 			GenericType skeltonType = (GenericType)t;
@@ -311,10 +311,10 @@ public abstract class MetaType  {
 	
 	private final static MetaType[] uniqueTypes(UniArray<MetaType> TypeList) {
 		UniStringBuilder sb = new UniStringBuilder();
-		sb.Append("Func");
+		sb.append("Func");
 		mangleTypes(sb, TypeList);
 		String key = sb.toString();
-		MetaType type = _TypeNameMap.GetValue(key, null);
+		MetaType type = _TypeNameMap.get(key, null);
 		if(type instanceof FuncType) {
 			return ((FuncType)type).typeParams;
 		}
@@ -398,7 +398,7 @@ class VarType extends MetaType {
 
 	@Override
 	public void stringfy(UniStringBuilder sb) {
-		sb.Append("var");
+		sb.append("var");
 	}
 
 	public boolean is(MetaType valueType, MetaType[] greekContext) {
@@ -445,7 +445,7 @@ class ValueType extends MetaType {
 
 	@Override
 	public void stringfy(UniStringBuilder sb) {
-		sb.Append(this.name);
+		sb.append(this.name);
 	}
 
 	public boolean is(MetaType valueType, MetaType[] greekContext) {
@@ -478,7 +478,7 @@ class GreekType extends MetaType {
 
 	@Override
 	public void stringfy(UniStringBuilder sb) {
-		sb.Append(Main._GreekNames[GreekId]);
+		sb.append(Main._GreekNames[GreekId]);
 	}
 
 	@Override
@@ -574,14 +574,14 @@ abstract class GenericType extends MetaType {
 
 	@Override
 	public void stringfy(UniStringBuilder sb) {
-		sb.Append(this.prefix);
+		sb.append(this.prefix);
 		for(int i = 0; i < typeParams.length; i++) {
 			if(i > 0) {
-				sb.Append(this.comma);
+				sb.append(this.comma);
 			}
 			typeParams[i].stringfy(sb);
 		}
-		sb.Append(this.suffix);
+		sb.append(this.suffix);
 	}
 
 	@Override

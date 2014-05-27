@@ -24,7 +24,7 @@ public class UniCharset {
 			return this.asciiSet[ch];
 		}
 		if(this.utfBitMap != null) {
-			return this.utfBitMap.HasKey(Main._CharToString(ch));
+			return this.utfBitMap.hasKey(Main._CharToString(ch));
 		}
 		return false;
 	}
@@ -36,7 +36,7 @@ public class UniCharset {
 		}
 		else {
 			if(this.utfBitMap == null) {
-				this.utfBitMap = new UniMap<String>(null);
+				this.utfBitMap = new UniMap<String>();
 			}
 			String key = Main._CharToString(ch);
 			this.utfBitMap.put(key, key);

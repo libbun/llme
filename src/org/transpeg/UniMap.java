@@ -27,76 +27,72 @@ package org.transpeg;
 import java.util.HashMap;
 
 public final class UniMap <T> {
-	final HashMap<String, T>	Map;
+	final HashMap<String, T>	m;
 
-	public UniMap(MetaType ElementType) {
-		this.Map = new HashMap<String, T>();
+	public UniMap() {
+		this.m = new HashMap<String, T>();
 	}
 
-	public UniMap(int TypeId, T[] Literal) {
-		this.Map = new HashMap<String, T>();
-		int i = 0;
-		while(i < Literal.length) {
-			this.Map.put(Literal[i].toString(), Literal[i+1]);
-			i = i + 2;
-		}
-	}
+//	public UniMap(int TypeId, T[] Literal) {
+//		this.m = new HashMap<String, T>();
+//		int i = 0;
+//		while(i < Literal.length) {
+//			this.m.put(Literal[i].toString(), Literal[i+1]);
+//			i = i + 2;
+//		}
+//	}
 
 	@Override public String toString() {
-		StringBuilder sBuilder = new StringBuilder();
-		sBuilder.append("{");
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
 		int i = 0;
-		for(String Key : this.Map.keySet()) {
+		for(String Key : this.m.keySet()) {
 			if(i > 0) {
-				sBuilder.append(", ");
+				sb.append(", ");
 			}
-			sBuilder.append(this.Stringify(Key));
-			sBuilder.append(" : ");
-			sBuilder.append(this.Stringify(this.Map.get(Key)));
+			sb.append(this.stringify(Key));
+			sb.append(" : ");
+			sb.append(this.stringify(this.m.get(Key)));
 			i++;
 		}
-		sBuilder.append("}");
-		return sBuilder.toString();
+		sb.append("}");
+		return sb.toString();
 	}
 
-	protected String Stringify(Object Value) {
+	protected String stringify(Object Value) {
 		if(Value instanceof String) {
 			return UniCharset._QuoteString((String) Value);
 		}
 		return Value.toString();
 	}
 
-	public final void put(String Key, T Value) {
-		this.Map.put(Key, Value);
+	public final void put(String key, T value) {
+		this.m.put(key, value);
 	}
 
-	public final T GetOrNull(String Key) {
-		return this.Map.get(Key);
+	public final T get(String key) {
+		return this.m.get(key);
 	}
 
-	public final T GetValue(String Key, T DefaultValue) {
-		T Value = this.Map.get(Key);
+	public final T get(String key, T defaultValue) {
+		T Value = this.m.get(key);
 		if(Value == null) {
-			return DefaultValue;
+			return defaultValue;
 		}
 		return Value;
 	}
 
 	public final void remove(String Key) {
-		this.Map.remove(Key);
+		this.m.remove(Key);
 	}
 
-	public void AddMap(UniMap<Object> aMap) {
-		throw new RuntimeException("unimplemented !!");
-	}
-
-	public final boolean HasKey(String Key) {
-		return this.Map.containsKey(Key);
+	public final boolean hasKey(String Key) {
+		return this.m.containsKey(Key);
 	}
 
 	public final UniArray<String> keys() {
-		UniArray<String> a = new UniArray<String>(new String[this.Map.size()]);
-		for(String k : this.Map.keySet()) {
+		UniArray<String> a = new UniArray<String>(new String[this.m.size()]);
+		for(String k : this.m.keySet()) {
 			a.add(k);
 		}
 		return a;
@@ -109,8 +105,8 @@ public final class UniMap <T> {
 //		}
 //		return Value;
 //	}
-
-	public final static <T> void SetIndex(UniMap<T> aMap, String Key, T Value) {
-		aMap.Map.put(Key, Value);
-	}
+//
+//	public final static <T> void SetIndex(UniMap<T> aMap, String Key, T Value) {
+//		aMap.m.put(Key, Value);
+//	}
 }

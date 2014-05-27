@@ -149,7 +149,7 @@ class DefineFunctor extends Functor {
 	private SectionFunctor newFunctor(SymbolTable gamma, PegObject defineNode) {
 		PegObject sig = defineNode.get(0);
 		String name = sig.getTextAt(0, null);
-		UniMap<Integer> nameMap = new UniMap<Integer>(null);
+		UniMap<Integer> nameMap = new UniMap<Integer>();
 		FuncType funcType = this.newFuncType(gamma, sig.get(1), sig.get(2,null), nameMap);
 		SectionFunctor functor = new SectionFunctor(name, funcType);
 		for(int i = 1; i < defineNode.size(); i++) {
@@ -310,7 +310,7 @@ class Section {
 			else if(chunkNode.is("section.command")) {
 				if(chunkNode.size() == 1) {
 					String name = chunkNode.getTextAt(0, null);
-					Integer index = nameMap.GetValue(name, null);
+					Integer index = nameMap.get(name, null);
 					if(index == null) {
 						System.out.println("undefined name: " + name);
 						return false;
@@ -320,7 +320,7 @@ class Section {
 				else {
 					String cmd = chunkNode.getTextAt(0, null);
 					String name = chunkNode.getTextAt(1, null);
-					Integer index = nameMap.GetValue(name, null);
+					Integer index = nameMap.get(name, null);
 					if(index == null) {
 						System.out.println("undefined name: " + name);
 						return false;

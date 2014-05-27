@@ -1,8 +1,8 @@
 package org.transpeg;
 
 public class Namespace extends SymbolTable {
-
 	public PegParser parser;
+	public UniMap<PegParser> parserMap;
 	public UniArray<String> exportSymbolList;
 
 	public Namespace(PegParser parser) {

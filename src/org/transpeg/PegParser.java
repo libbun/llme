@@ -11,7 +11,7 @@ public final class PegParser {
 		this.initParser();
 	}
 	public void initParser() {
-		this.pegMap = new UniMap<Peg>(null);
+		this.pegMap = new UniMap<Peg>();
 	}
 
 	public PegParserContext newContext(BunSource source, int startIndex, int endIndex) {
@@ -59,7 +59,7 @@ public final class PegParser {
 		}
 		if(e instanceof PegLabel) {  // self reference
 			if(name.equals(((PegLabel) e).symbol)) {
-				Peg defined = this.pegMap.GetValue(name, null);
+				Peg defined = this.pegMap.get(name, null);
 				if(defined == null) {
 					System.out.println("undefined self reference: " + name);
 				}
@@ -74,7 +74,7 @@ public final class PegParser {
 		UniArray<String> list = this.pegMap.keys();
 		for(int i = 0; i < list.size(); i++) {
 			String key = list.ArrayValues[i];
-			Peg e = this.pegMap.GetValue(key, null);
+			Peg e = this.pegMap.get(key, null);
 			this.removeLeftRecursion(key, e);
 			if(Main.pegDebugger) {
 				System.out.println(e.toPrintableString(key));
@@ -83,7 +83,7 @@ public final class PegParser {
 		list = this.pegCache.keys();
 		for(int i = 0; i < list.size(); i++) {
 			String key = list.ArrayValues[i];
-			Peg e = this.pegCache.GetValue(key, null);
+			Peg e = this.pegCache.get(key, null);
 			if(Main.pegDebugger) {
 				System.out.println(e.toPrintableString(key));
 			}
@@ -112,7 +112,7 @@ public final class PegParser {
 	}
 	
 	private void initCache() {
-		this.pegCache = new UniMap<Peg>(null);
+		this.pegCache = new UniMap<Peg>();
 //		this.keywordCache = new UniMap<String>(null);
 //		this.firstCharCache = new UniMap<String>(null);
 //		this.firstCharCache.put("0", "");
@@ -137,7 +137,7 @@ public final class PegParser {
 						return;
 					}
 					else {
-						Peg left = this.pegMap.GetValue(label, null);
+						Peg left = this.pegMap.get(label, null);
 						if(this.hasLabel(name, left)) {
 							String key = this.nameRightJoinName(label);  // indirect left recursion
 							this.appendPegCache(key, seq.cdr());
@@ -166,14 +166,14 @@ public final class PegParser {
 			if(name.equals(label)) {
 				return true;
 			}
-			e = this.pegMap.GetValue(label, null);
+			e = this.pegMap.get(label, null);
 			return this.hasLabel(name, e);
 		}
 		return false;
 	}
 	
 	private void appendPegCache(String name, Peg e) {
-		Peg defined = this.pegCache.GetValue(name, null);
+		Peg defined = this.pegCache.get(name, null);
 		if(defined != null) {
 			e = new PegChoice(null, defined, e);
 		}
@@ -184,14 +184,14 @@ public final class PegParser {
 		if(this.pegCache == null) {
 			this.resetCache();
 		}
-		return this.pegCache.GetValue(name, null) != null;
+		return this.pegCache.get(name, null) != null;
 	}
 
 	public final Peg getPattern(String name, char firstChar) {
 		if(this.pegCache == null) {
 			this.resetCache();
 		}
-		return this.pegCache.GetValue(name, null);
+		return this.pegCache.get(name, null);
 	}
 
 	public final Peg getRightPattern(String name, char firstChar) {

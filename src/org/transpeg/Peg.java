@@ -55,8 +55,8 @@ public abstract class Peg {
 
 	public final String toPrintableString(String name) {
 		UniStringBuilder sb = new UniStringBuilder();
-		sb.Append(name);
-		sb.Append(" <- ");
+		sb.append(name);
+		sb.append(" <- ");
 		this.joinPrintableString(sb, this);
 		return sb.toString();
 	}
@@ -64,7 +64,7 @@ public abstract class Peg {
 	private void joinPrintableString(UniStringBuilder sb, Peg e) {
 		if(e instanceof PegChoice) {
 			((PegChoice)e).firstExpr.stringfy(sb, true);
-			sb.Append("\n\t/ ");
+			sb.append("\n\t/ ");
 			this.joinPrintableString(sb, ((PegChoice)e).secondExpr);
 		}
 		else {
@@ -134,7 +134,7 @@ class PegString extends PegAtom {
 		if(this.symbol.indexOf("'") != -1) {
 			Quote = '"';
 		}
-		sb.Append(UniCharset._QuoteString(Quote, this.symbol, Quote));
+		sb.append(UniCharset._QuoteString(Quote, this.symbol, Quote));
 	}
 
 	@Override
@@ -159,7 +159,7 @@ class PegAny extends PegAtom {
 
 	@Override
 	protected void stringfy(UniStringBuilder sb, boolean debugMode) {
-		sb.Append(".");
+		sb.append(".");
 	}
 
 	@Override
@@ -187,7 +187,7 @@ class PegCharacter extends PegAtom {
 
 	@Override
 	protected void stringfy(UniStringBuilder sb, boolean debugMode) {
-		sb.Append("[" + this.symbol, "]");
+		sb.append("[" + this.symbol, "]");
 	}
 
 	@Override
@@ -214,7 +214,7 @@ class PegLabel extends PegAtom {
 
 	@Override
 	protected void stringfy(UniStringBuilder sb, boolean debugMode) {
-		sb.Append(this.symbol);
+		sb.append(this.symbol);
 	}
 
 	@Override protected PegObject lazyMatch(PegObject parentNode, PegParserContext source, boolean hasNextChoice) {
@@ -280,11 +280,11 @@ abstract class PegSuffixed extends Peg {
 			this.innerExpr.stringfy(sb, debugMode);
 		}
 		else {
-			sb.Append("(");
+			sb.append("(");
 			this.innerExpr.stringfy(sb, debugMode);
-			sb.Append(")");
+			sb.append(")");
 		}
-		sb.Append(this.getOperator());
+		sb.append(this.getOperator());
 	}
 	protected abstract String getOperator();
 
@@ -411,14 +411,14 @@ abstract class PegPredicate extends Peg {
 	}
 	@Override
 	protected final void stringfy(UniStringBuilder sb, boolean debugMode) {
-		sb.Append(this.getOperator());
+		sb.append(this.getOperator());
 		if(this.innerExpr instanceof PegAtom) {
 			this.innerExpr.stringfy(sb, debugMode);
 		}
 		else {
-			sb.Append("(");
+			sb.append("(");
 			this.innerExpr.stringfy(sb, debugMode);
-			sb.Append(")");
+			sb.append(")");
 		}
 	}
 	protected abstract String getOperator();
@@ -491,13 +491,13 @@ class PegSequence extends Peg {
 	@Override protected void stringfy(UniStringBuilder sb, boolean debugMode) {
 		for(int i = 0; i < this.list.size(); i++) {
 			if(i > 0) {
-				sb.Append(" ");
+				sb.append(" ");
 			}
 			Peg e = this.list.ArrayValues[i];
 			if(e instanceof PegChoice || e instanceof PegSequence) {
-				sb.Append("(");
+				sb.append("(");
 				e.stringfy(sb, debugMode);
-				sb.Append(")");
+				sb.append(")");
 			}
 			else {
 				e.stringfy(sb, debugMode);
@@ -553,7 +553,7 @@ class PegChoice extends Peg {
 	@Override
 	protected void stringfy(UniStringBuilder sb, boolean debugMode) {
 		this.firstExpr.stringfy(sb, debugMode);
-		sb.Append(" / ");
+		sb.append(" / ");
 		this.secondExpr.stringfy(sb, debugMode);
 	}
 
@@ -669,8 +669,8 @@ class PegObjectName extends Peg {
 	@Override
 	protected final void stringfy(UniStringBuilder sb, boolean debugMode) {
 		if(debugMode) {
-			sb.Append("#");
-			sb.Append(this.nodeName);
+			sb.append("#");
+			sb.append(this.nodeName);
 		}
 	}
 
@@ -700,14 +700,14 @@ class PegNewObject extends Peg {
 	@Override
 	protected final void stringfy(UniStringBuilder sb, boolean debugMode) {
 		if(debugMode) {
-			sb.Append("{");
+			sb.append("{");
 			if(this.leftJoin) {
-				sb.Append("$ ");
+				sb.append("$ ");
 			}
 		}
 		this.innerExpr.stringfy(sb, debugMode);
 		if(debugMode) {
-			sb.Append("}");
+			sb.append("}");
 		}
 	}
 

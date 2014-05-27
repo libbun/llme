@@ -6,8 +6,8 @@ public class PegParserContext extends SourceContext {
 	final UniArray<Log> logStack = new UniArray<Log>(new Log[128]);
 	private int stackTop = 0;
 
-	private final UniMap<PegObject> memoMap = new UniMap<PegObject>(null);
-	private final UniMap<Memo> memoMap2 = new UniMap<Memo>(null);
+	private final UniMap<PegObject> memoMap = new UniMap<PegObject>();
+	private final UniMap<Memo> memoMap2 = new UniMap<Memo>();
 	int memoHit = 0;
 	int memoMiss = 0;
 	int memoSize = 0;
@@ -91,7 +91,7 @@ public class PegParserContext extends SourceContext {
 	public final PegObject parsePegNode(PegObject parentNode, String pattern, boolean hasNextChoice) {
 		int pos = this.getPosition();
 		String key = pattern + ":" + pos;
-		Memo m = this.memoMap2.GetValue(key, null);
+		Memo m = this.memoMap2.get(key, null);
 		if(m != null) {
 			this.memoHit = this.memoHit + 1;
 			this.sourcePosition = m.nextPosition;
@@ -119,7 +119,7 @@ public class PegParserContext extends SourceContext {
 	public final PegObject parsePegNode2(PegObject parentNode, String pattern, boolean hasNextChoice) {
 		int pos = this.getPosition();
 		String key = pattern + ":" + pos;
-		PegObject node = this.memoMap.GetValue(key, null);
+		PegObject node = this.memoMap.get(key, null);
 		if(node != null) {
 			this.memoHit = this.memoHit + 1;
 			return node;

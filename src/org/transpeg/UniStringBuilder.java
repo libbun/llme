@@ -1,7 +1,7 @@
 package org.transpeg;
 
 public class UniStringBuilder {
-	public final UniArray<String> SourceList = new UniArray<String>(new String[128]);
+	public final UniArray<String> slist = new UniArray<String>(new String[128]);
 	protected int IndentLevel = 0;
 	protected String CurrentIndentString = "";
 	protected char LastChar   = '\n';
@@ -11,39 +11,39 @@ public class UniStringBuilder {
 	public UniStringBuilder() {
 	}
 
-	public final boolean IsEmpty(String Text) {
+	public final boolean isEmpty(String Text) {
 		return (Text == null || Text.length() == 0);
 	}
 
-	public final void Append(String Source) {
-		if(!this.IsEmpty(Source)) {
-			this.SourceList.add(Source);
+	public final void append(String Source) {
+		if(!this.isEmpty(Source)) {
+			this.slist.add(Source);
 			this.LastChar = Main._GetChar(Source, Source.length()-1);
 		}
 	}
 
-	public final void Append(String Text, String Text2) {
-		this.SourceList.add(Text);
-		this.SourceList.add(Text2);
+	public final void append(String Text, String Text2) {
+		this.slist.add(Text);
+		this.slist.add(Text2);
 	}
 
-	public final void Append(String Text, String Text2, String Text3) {
-		this.SourceList.add(Text);
-		this.SourceList.add(Text2);
-		this.SourceList.add(Text3);
+	public final void append(String Text, String Text2, String Text3) {
+		this.slist.add(Text);
+		this.slist.add(Text2);
+		this.slist.add(Text3);
 	}
 
-	public final void AppendInt(int Value) {
-		this.SourceList.add("" + Value);
+	public final void appendInt(int Value) {
+		this.slist.add("" + Value);
 	}
 
 	public final void AppendQuotedText(String Text) {
-		this.SourceList.add(UniCharset._QuoteString(Text));
+		this.slist.add(UniCharset._QuoteString(Text));
 	}
 
 	public final void AppendLineFeed() {
 		if(this.LastChar != '\n') {
-			this.SourceList.add(this.LineFeed);
+			this.slist.add(this.LineFeed);
 		}
 	}
 
@@ -54,7 +54,7 @@ public class UniStringBuilder {
 
 	public final void OpenIndent(String Text) {
 		if(Text != null && Text.length() > 0) {
-			this.Append(Text);
+			this.append(Text);
 		}
 		this.OpenIndent();
 	}
@@ -83,7 +83,7 @@ public class UniStringBuilder {
 		if (this.CurrentIndentString == null) {
 			this.CurrentIndentString = this.joinStrings(this.Tabular, this.IndentLevel);
 		}
-		this.SourceList.add(this.CurrentIndentString);
+		this.slist.add(this.CurrentIndentString);
 	}
 
 	public final String joinStrings(String Unit, int Times) {
@@ -103,53 +103,53 @@ public class UniStringBuilder {
 
 	public final void AppendNewLine(String Text) {
 		this.AppendNewLine();
-		this.Append(Text);
+		this.append(Text);
 	}
 
 	public final void AppendNewLine(String Text, String Text2) {
 		this.AppendNewLine();
-		this.Append(Text);
-		this.Append(Text2);
+		this.append(Text);
+		this.append(Text2);
 	}
 
 	public final void AppendNewLine(String Text, String Text2, String Text3) {
 		this.AppendNewLine();
-		this.Append(Text);
-		this.Append(Text2);
-		this.Append(Text3);
+		this.append(Text);
+		this.append(Text2);
+		this.append(Text3);
 	}
 
-	public final boolean EndsWith(char s) {
-		return this.LastChar == s;
-	}
+//	public final boolean EndsWith(char s) {
+//		return this.LastChar == s;
+//	}
+//
+//	public final void AppendWhiteSpace() {
+//		if(this.LastChar == ' ' || this.LastChar == '\t' || this.LastChar == '\n') {
+//			return;
+//		}
+//		this.slist.add(" ");
+//	}
+//
+//	public final void AppendWhiteSpace(String Text) {
+//		this.AppendWhiteSpace();
+//		this.append(Text);
+//	}
+//
+//	public final void AppendWhiteSpace(String Text, String Text2) {
+//		this.AppendWhiteSpace();
+//		this.append(Text);
+//		this.append(Text2);
+//	}
+//
+//	public final void AppendWhiteSpace(String Text, String Text2, String Text3) {
+//		this.AppendWhiteSpace();
+//		this.append(Text);
+//		this.append(Text2);
+//		this.append(Text3);
+//	}
 
-	public final void AppendWhiteSpace() {
-		if(this.LastChar == ' ' || this.LastChar == '\t' || this.LastChar == '\n') {
-			return;
-		}
-		this.SourceList.add(" ");
-	}
-
-	public final void AppendWhiteSpace(String Text) {
-		this.AppendWhiteSpace();
-		this.Append(Text);
-	}
-
-	public final void AppendWhiteSpace(String Text, String Text2) {
-		this.AppendWhiteSpace();
-		this.Append(Text);
-		this.Append(Text2);
-	}
-
-	public final void AppendWhiteSpace(String Text, String Text2, String Text3) {
-		this.AppendWhiteSpace();
-		this.Append(Text);
-		this.Append(Text2);
-		this.Append(Text3);
-	}
-
-	public final void Clear() {
-		this.SourceList.clear(0);
+	public final void clear() {
+		this.slist.clear(0);
 	}
 
 	@Override public final String toString() {
