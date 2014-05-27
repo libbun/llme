@@ -46,7 +46,12 @@ public class Main {
 				break;
 			}
 			index = index + 1;
-			if ((argument.equals("-l") || argument.equals("--peg")) && (index < args.length)) {
+			if (argument.equals("--peg") && (index < args.length)) {
+				LanguagePeg = args[index];
+				pegDebugger = true;
+				index = index + 1;
+			}
+			else if (argument.equals("-l") && (index < args.length)) {
 				LanguagePeg = args[index];
 				index = index + 1;
 			}
@@ -186,16 +191,18 @@ public class Main {
 					System.out.println("backtrackCount: " + context.backtrackCount + ", backtrackLength: " + context.backtrackSize);
 					System.out.println();
 				}
-				Functor f = gamma.getFunctor(node);
-				System.out.println("functor: " + f);
-				if(f != null) {
-					if(f.match(node)) {
-						f.build(node, driver);
+				if(driver != null) {
+					Functor f = gamma.getFunctor(node);
+					System.out.println("functor: " + f);
+					if(f != null) {
+						if(f.match(node)) {
+							f.build(node, driver);
+						}
 					}
-				}
-				else {
-					if(!pegDebugger) {
-						System.out.println("parsed:\n" + node.toString());
+					else {
+						if(!pegDebugger) {
+							System.out.println("parsed: " + node.toString());
+						}
 					}
 				}
 				linenum = linenum + 1;

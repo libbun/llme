@@ -79,8 +79,8 @@ public class PegParserContext extends SourceContext {
 		return po;
 	}
 
-	public String getFirstChar() {
-		return String.valueOf(this.getChar());
+	public char getFirstChar() {
+		return this.getChar();
 	}
 
 	public boolean isLeftRecursion(String PatternName) {

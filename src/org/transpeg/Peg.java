@@ -2,7 +2,6 @@ package org.transpeg;
 
 public abstract class Peg {
 	public final static boolean _BackTrack = true;
-
 	String    name     = null;
 	int       priority = 0;
 	boolean   debug    = false;
@@ -521,6 +520,23 @@ class PegSequence extends Peg {
 	@Override
 	public void accept(PegVisitor visitor) {
 		visitor.visitSequence(this);
+	}
+
+	public int size() {
+		return this.list.size();
+	}
+	
+	public Peg get(int index) {
+		return this.list.ArrayValues[index];
+	}
+	
+	public Peg cdr() {
+		PegSequence seq = new PegSequence(this.get(1)); 
+		for(int i = 2; i < this.size(); i++) {
+			Peg e  = this.list.ArrayValues[i];
+			seq.list.add(e);
+		}
+		return seq;
 	}
 
 }
